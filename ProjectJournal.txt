@@ -3,4 +3,5 @@ Project Journal
 2024-04-08
 
 -Aggregated to create a yearly df.
--Missing value analysis. 98% of months have a missing value. 6400 missing data points total. 
+-Conducted missing value analysis. 98% of months have a missing value. 6400 missing data points total. 
+-Need to tweak the outlier detection function.
