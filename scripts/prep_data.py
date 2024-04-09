@@ -52,23 +52,29 @@ def aggregate_years(df, year_columns, non_time_columns):
     df_yearly[non_time_columns] = df[non_time_columns]
     return df_yearly[non_time_columns + sorted(year_columns)]
 
-def detect_outliers(df):
+def detect_outliers(df, numeric_columns):
     """
-    Detects outliers in a DataFrame using the Interquartile Range (IQR) method.
+    Detects outliers in the numeric columns of a DataFrame using the Interquartile Range (IQR) method.
 
     Parameters:
     df (DataFrame): The pandas DataFrame to analyze for outliers.
+    numeric_columns (list): List of column names in df that are numeric.
 
     Returns:
-    DataFrame: A DataFrame containing only the rows identified as outliers.
+    tuple: 
+        - DataFrame containing only the rows identified as outliers in numeric columns.
+        - Series indicating the count of outliers in each numeric column.
     """
-    Q1 = df.quantile(0.25)
-    Q3 = df.quantile(0.75)
+    Q1 = df[numeric_columns].quantile(0.25)
+    Q3 = df[numeric_columns].quantile(0.75)
     IQR = Q3 - Q1
 
-    outlier_condition = ((df < (Q1 - 1.5 * IQR)) | (df > (Q3 + 1.5 * IQR)))
+    outlier_condition = ((df[numeric_columns] < (Q1 - 1.5 * IQR)) | (df[numeric_columns] > (Q3 + 1.5 * IQR)))
     outliers = outlier_condition.any(axis=1)
-    return df[outliers]
+    outliers_df = df[outliers]
+    outliers_count = outlier_condition.sum()
+
+    return outliers_df, outliers_count
 
 # Set display options
 pd.set_option('display.max_columns', None)
@@ -105,3 +111,9 @@ print(df_crime_yearly.head())
 print("Yearly df:")
 analyse_missing_values(df_crime_yearly)
 
+# outlier analysis
+numeric_cols = df_crime_monthly.select_dtypes(include=['number']).columns.tolist()
+outliers_df, outliers_count = detect_outliers(df_crime_monthly, numeric_cols)
+
+print("Outliers detected in each numeric column:\n", outliers_count)
+print("\nRows with outliers in numeric columns:\n", outliers_df)
