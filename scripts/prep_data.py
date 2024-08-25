@@ -80,8 +80,8 @@ def detect_outliers(df, numeric_columns):
 pd.set_option('display.max_columns', None)
 
 # File paths
-historical_data_path = '/home/jn607/Projects/LondonCrimeInsights/data/raw_data/APR2010-FEB2022.csv'
-recent_data_path = '/home/jn607/Projects/LondonCrimeInsights/data/raw_data/FEB2022-FEB2024.csv'
+historical_data_path = '/Users/joshnolan/programmingProjects/CrimeInsights/LondonCrimeInsights/data/raw_data/APR2010-FEB2022.csv'
+recent_data_path = '/Users/joshnolan/programmingProjects/CrimeInsights/LondonCrimeInsights/data/raw_data/FEB2022-FEB2024.csv'
 
 # Read and inspect data
 df_historical_data_raw = read_and_inspect(historical_data_path, ['MajorText', 'MinorText'])
@@ -89,6 +89,9 @@ df_recent_data_raw = read_and_inspect(recent_data_path, ['MajorText', 'MinorText
 
 # Merge the dataframes
 df_crime_monthly = pd.merge(df_historical_data_raw, df_recent_data_raw, how='outer',on=['MajorText', 'MinorText', 'LookUp_BoroughName'])
+
+df_crime_monthly.to_csv('/Users/joshnolan/programmingProjects/CrimeInsights/LondonCrimeInsights/data/bronze_data/bronze_crime_monthly.csv', index=False)
+
 
 # Inspect the merged data
 print("Shape:", df_crime_monthly.shape)
