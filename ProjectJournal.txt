@@ -10,4 +10,6 @@ Project Journal
 -Fixed Outlier analysis tool to only analyse the numeric columns. The outliers represent what seem to be valid data points,
 there are no extreme values 
 
-
+2024-08-26
+-Created bronze layer data
+-Need to move transforms and data eda from prep_data into the notebook
